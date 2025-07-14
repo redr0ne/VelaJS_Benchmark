@@ -1,0 +1,29 @@
+{
+    "app": {
+      "title": "Vela OS Benchmark",
+      "version": "Version: {version}"
+    },
+    "button": {
+      "run": "Run Benchmark",
+      "running": "Running..."
+    },
+    "status": {
+      "running": "Running benchmark tests, please wait..."
+    },
+    "results": {
+      "header_test": "Test",
+      "header_performance": "Performance",
+      "not_supported": "Not supported",
+      "timeout": "Timeout",
+      "error": "Error",
+      "completion_time": "Benchmark completed at: {time}"
+    },
+    "tests": {
+      "math": "Math Operations",
+      "string": "String Manipulation",
+      "array": "Array Operations",
+      "object": "Object Operations",
+      "json": "JSON Operations",
+      "crypto": "Cryptography (SHA-256)"
+    }
+  }

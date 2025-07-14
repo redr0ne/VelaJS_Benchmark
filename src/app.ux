@@ -1,0 +1,51 @@
+<script>
+import BenchmarkService from './services/benchmark.service.js';
+import brightness from '@system.brightness';
+import app from '@system.app';
+
+export default {
+  BenchmarkService: BenchmarkService,
+
+  startBenchmark(pageContext) {
+    if (pageContext.isRunning) {
+      return;
+    }
+    
+    // Call new method on the page to handle state reset
+    pageContext.handleBenchmarkStart();
+
+    this.setScreenOn(true);
+
+    const benchmarkService = new this.BenchmarkService({
+      onProgress: (result) => {
+        // CORRECTION: Instead of manipulating the page state directly,
+        // we call a dedicated handler method on the page.
+        pageContext.handleBenchmarkProgress(result);
+      },
+      onComplete: (allResults) => {
+        // The page itself will handle the final state update.
+        pageContext.handleBenchmarkComplete(allResults);
+        this.setScreenOn(false);
+      }
+    });
+
+    benchmarkService.start().catch((error) => {
+      console.error('Benchmark suite failed:', error);
+      pageContext.handleBenchmarkError(error); // Optional error handler
+      this.setScreenOn(false);
+    });
+  },
+  
+  setScreenOn(keepOn) {
+    if (app.canIUse('@system.brightness')) {
+      brightness.setKeepScreenOn({
+        keepScreenOn: keepOn,
+        success: () => console.log(`Keep screen on state set to: ${keepOn}`),
+        fail: (data, code) => console.error(`Failed to set keepScreenOn. Code: ${code}`)
+      });
+    } else {
+      console.warn('system.brightness API is not supported.');
+    }
+  }
+}
+</script>

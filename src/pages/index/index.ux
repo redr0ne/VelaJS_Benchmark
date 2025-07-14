@@ -1,0 +1,129 @@
+<template>
+  <div class="container">
+    <text class="title">{{ $t('app.title') }}</text>
+    <text class="version">{{ $t('app.version', { version: '0.2.0' }) }}</text>
+
+    <!-- The template remains unchanged as it's already bound to local state -->
+    <div
+      class="button {{ isRunning ? 'button-disabled' : '' }} {{ isButtonPressed ? 'button-active' : '' }}"
+      onclick="onRunButtonClick"
+      ontouchstart="handleTouchStart"
+      ontouchend="handleTouchEnd">
+      <text class="button-text">{{ isRunning ? $t('button.running') : $t('button.run') }}</text>
+    </div>
+
+    <text show="{{isRunning}}" class="status-message">{{ $t('status.running') }}</text>
+    
+    <result-list 
+      if="{{ benchmarkResults.length > 0 }}"
+      results="{{ benchmarkResults }}"
+      completion-time="{{ completionTime }}">
+    </result-list>
+  </div>
+</template>
+
+<import name="result-list" src="../../components/result-list/result-list.ux"></import>
+
+<style>
+  @import './index.css';
+</style>
+
+<script>
+  export default {
+    private: {
+      isRunning: false,
+      isButtonPressed: false,
+      benchmarkResults: [], // This will now store FULLY PROCESSED data
+      completionTime: null
+    },
+
+    onRunButtonClick() {
+      if (!this.isRunning) {
+        this.$app.$def.startBenchmark(this);
+      }
+    },
+    
+    handleTouchStart() {
+      if (!this.isRunning) {
+        this.isButtonPressed = true;
+      }
+    },
+    
+    handleTouchEnd() {
+      this.isButtonPressed = false;
+    },
+
+    /**
+     * CORRECTION: All the data processing and localization logic is now centralized
+     * here, inside the page's script.
+     */
+
+    /**
+     * Resets the state before a new benchmark run.
+     */
+    handleBenchmarkStart() {
+      this.isRunning = true;
+      this.isButtonPressed = false; // Ensure button is not stuck in active state
+      this.benchmarkResults = [];
+      this.completionTime = null;
+    },
+
+    /**
+     * Processes and adds a single benchmark result to the list.
+     * This allows for showing results in real-time.
+     */
+    handleBenchmarkProgress(rawResult) {
+      const processedResult = this.processResult(rawResult);
+      this.benchmarkResults.push(processedResult);
+    },
+
+    /**
+     * Processes the final list of all results at once.
+     */
+    handleBenchmarkComplete(allRawResults) {
+      this.benchmarkResults = allRawResults.map(result => this.processResult(result));
+      this.isRunning = false;
+      const now = new Date();
+      this.completionTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    },
+    
+    handleBenchmarkError(error){
+      // Optional: Handle errors from the service
+      this.isRunning = false;
+      // You could display an error message here
+    },
+
+    /**
+     * A helper function to transform a single raw result object into a display-ready object.
+     * @param {object} rawResult - An object like { testNameKey: 'math', ops: '...' }
+     * @returns {object} An object ready for the component, e.g., { testName: 'Math Operations', ops: '...', isDisabled: false }
+     */
+    processResult(rawResult) {
+      // Localize test name
+      const testName = this.$t('tests.' + rawResult.testNameKey);
+      
+      // Localize special ops values
+      let ops = rawResult.ops;
+      let isDisabled = false;
+
+      if (ops === 'Not supported') {
+        ops = this.$t('results.not_supported');
+        isDisabled = true;
+      } else if (ops === 'Timeout') {
+        ops = this.$t('results.timeout');
+        isDisabled = true;
+      } else if (ops === 'Error') {
+        ops = this.$t('results.error');
+        isDisabled = true;
+      }
+      
+      return {
+        testName: testName,
+        ops: ops,
+        isDisabled: isDisabled,
+        // We add the key here so `tid` in the list-item can still use it
+        testNameKey: rawResult.testNameKey 
+      };
+    }
+  }
+</script>

@@ -1,0 +1,75 @@
+.results-container {
+  /* This container wraps the list and the completion time text */
+  flex-direction: column;
+  width: 100%;
+  flex: 1; /* Allows the container to fill available vertical space */
+  margin-top: 24px;
+}
+
+.results-list {
+  /* The list itself. `flex: 1` ensures it expands */
+  flex: 1; 
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.list-header, .list-item {
+  /* Common styles for both header and item rows */
+  height: 60px;
+  width: 100%;
+}
+
+.list-header {
+  /* Specific styles for the header row */
+  background-color: #f0f2f5;
+  border-bottom: 1px solid #dcdcdc;
+  /* Make header text bolder */
+  font-weight: bold; 
+}
+
+.list-item {
+  /* A subtle border separates each item */
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.list-row {
+  /* Flex container for aligning "Test" and "Performance" columns */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 100%;
+}
+
+.col-test {
+  /* Style for the test name column */
+  flex: 1; /* Takes up the remaining space */
+  font-size: 22px;
+  color: #333333;
+  text-align: left;
+}
+
+.col-result {
+  /* Style for the performance result column */
+  width: 180px; /* Fixed width to align results nicely */
+  font-size: 22px;
+  color: #007aff;
+  font-weight: bold;
+  text-align: right;
+}
+
+.result-disabled {
+  /* A different color for non-numeric results like "Not supported" */
+  color: #a0a0a0;
+  font-weight: normal;
+}
+
+.completion-time {
+  /* Style for the final completion time text below the list */
+  font-size: 20px;
+  color: #888888;
+  margin-top: 24px;
+  text-align: center;
+}

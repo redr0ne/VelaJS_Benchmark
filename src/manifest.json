@@ -1,0 +1,34 @@
+{
+  "package": "com.redrone.velabenchmark",
+  "name": "Vela Benchmark",
+  "icon": "/common/logo.png",
+  "versionName": "0.2.0",
+  "versionCode": 2,
+  "minAPILevel": 3,
+  "config": {
+    "logLevel": "info",
+    "designWidth": 480
+  },
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.crypto"
+    },
+    {
+      "name": "system.brightness"
+    }
+  ],
+  "router": {
+    "entry": "pages/index",
+    "pages": {
+      "pages/index": {
+        "component": "index"
+      }
+    }
+  },
+  "deviceTypeList": [
+    "watch"
+  ]
+}

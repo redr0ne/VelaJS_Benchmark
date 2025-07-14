@@ -1,0 +1,54 @@
+<template>
+  <div class="results-container">
+    <list class="results-list" bounces="true">
+      <list-item type="header" class="list-header">
+        <div class="list-row">
+          <text class="col-test">{{ $t('results.header_test') }}</text>
+          <text class="col-result">{{ $t('results.header_performance') }}</text>
+        </div>
+      </list-item>
+      
+      <!--
+        CORRECTION: The template now directly renders pre-processed properties.
+        'testName' is a fully translated string. 'ops' is a localized value.
+        There are NO function calls inside the loop.
+      -->
+      <list-item for="{{results}}" type="item" class="list-item" tid="$idx">
+        <div class="list-row">
+          <text class="col-test">{{ $item.testName }}</text>
+          <text class="col-result {{ $item.isDisabled ? 'result-disabled' : '' }}">
+              {{ $item.ops }}
+          </text>
+        </div>
+      </list-item>
+    </list>
+
+    <text if="{{completionTime}}" class="completion-time">
+      {{ $t('results.completion_time', { time: completionTime }) }}
+    </text>
+  </div>
+</template>
+
+<style>
+  @import './result-list.css';
+</style>
+
+<script>
+export default {
+  /**
+   * The component now expects a fully processed 'results' array.
+   * Each item should have properties like 'testName', 'ops', and 'isDisabled'.
+   */
+  props: {
+    results: {
+      type: Array,
+      default: []
+    },
+    completionTime: {
+      type: String,
+      default: ''
+    }
+  }
+  // No methods are needed here anymore, making the component truly reusable and simple.
+}
+</script>
