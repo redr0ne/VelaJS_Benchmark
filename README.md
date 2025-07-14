@@ -2,7 +2,7 @@
 
 An open-source benchmark application designed for **Xiaomi Vela OS**, built with the Vela JS framework.
 
-<img width="426" height="855" alt="Vela_Band9Pro-2025-07-14-17-54-06" src="https://github.com/user-attachments/assets/3d099020-7ff7-4a0c-9b08-5a605f5407ac" />
+<img width="213" height="427" alt="Vela_Band9Pro-2025-07-14-17-54-06" src="https://github.com/user-attachments/assets/3d099020-7ff7-4a0c-9b08-5a605f5407ac" />
 
 
 ## Features
